@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, Mummy!</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    #typing-text {
+      transition: width 2s ease-in-out;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    #ascii-container {
+      font-family: monospace;
+      white-space: pre;
+      margin: 20px 0;
+    }
+    #letter-section {
+      opacity: 0;
+      transition: opacity 1s ease-in;
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #e91e63;
+    }
+    canvas#confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="typing-text">
+    <h1>Happy Birthday, Mummy!</h1>
+    <p>🎂 It's your special day today!</p>
+    <p>💕 Celebrating the most amazing mom in the world...</p>
+  </div>
+
+  <h2>🎉 Welcome to your birthday celebration! Explore your memories:</h2>
+  <div>
+    <button onclick="showSection('family')">👨‍👩‍👧‍👦 Family</button>
+    <button onclick="showSection('letter')">💌 Special Message</button>
+    <button onclick="showSection('wish')">🎂 Wish Happy Birthday</button>
+  </div>
+
+  <div id="family" style="display: none;">
+    <h3>Family Memories</h3>
+    <p>Content about family memories goes here.</p>
+  </div>
+
+  <div id="letter" style="display: none;">
+    <div id="letter-section">
+      <p>To the woman who compiled my courage and debugged my fears...</p>
+      <p>Mummy, you are my greatest source of strength, the constant function in all my recursive problems. Thank you for every byte of love and every line of care.</p>
+      <p><strong>Happy Birthday!</strong></p>
+      <p>- Khushbu 💖</p>
+      <button onclick="closeSection('letter')">Close</button>
+    </div>
+  </div>
+
+  <div id="wish" style="display: none;">
+    <h3>🎂 Wish Happy Birthday to Mummy</h3>
+    <p>Write your special birthday message and create a beautiful card to send!</p>
+    <textarea id="card-message" placeholder="Enter your birthday message here..." rows="5" cols="50"></textarea>
+    <br>
+    <button onclick="createCard()">🎨 Create Birthday Card</button>
+    <div id="card-preview"></div>
+    <button onclick="downloadCard()">💌 Send Card to Mummy</button>
+    <p>Click "Send Card to Mummy" to download and share this beautiful birthday card! 💖</p>
+  </div>
+
+  <div id="ascii-container"></div>
+  <p id="birthday-wish">મમ્મી, તમને જન્મદિવસની દિલથી ખૂબ ખૂબ શુભકામનાઓ 💐</p>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    function showSection(sectionId) {
+      document.querySelectorAll('#family, #letter, #wish').forEach(section => {
+        section.style.display = section.id === sectionId ? 'block' : 'none';
+      });
+    }
+
+    function closeSection(sectionId) {
+      document.getElementById(sectionId).style.display = 'none';
+    }
+
+    function createCard() {
+      const message = document.getElementById('card-message').value || 'Happy Birthday, Mummy!';
+      const cardContent = `
+        <h2>Happy Birthday, Mummy!</h2>
+        <p>${message}</p>
+        <p>With all my love, Khushbu 💖</p>
+      `;
+      document.getElementById('card-preview').innerHTML = cardContent;
+      triggerConfetti();
+    }
+
+    function downloadCard() {
+      const message = document.getElementById('card-message').value || 'Happy Birthday, Mummy!';
+      const shareableCard = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <title>Birthday Card for Mummy</title>
+          <style>
+            body { font-family: Arial, sans-serif; text-align: center; background-color: #ffe6f0; padding: 20px; }
+            h2 { color: #ff4081; }
+            p { font-size: 18px; }
+          </style>
+        </head>
+        <body>
+          <h2>Happy Birthday, Mummy!</h2>
+          <p>${message}</p>
+          <p>With all my love, Khushbu 💖</p>
+        </body>
+        </html>
+      `;
+      const blob = new Blob([shareableCard], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Beautiful_Birthday_Card_For_Mummy.html';
+      a.click();
+      URL.revokeObjectURL(url);
+
+      alert('🎉 Your beautiful birthday card is ready to send!\n\n💌 The card has been downloaded\n📧 Attach it to an email or message\n💖 Send it to Mummy with lots of love!\n\nShe\'s going to absolutely love this surprise! ✨');
+
+      if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        setTimeout(() => {
+          const subject = '🎂 Special Birthday Card for You! 🎂';
+          const body = 'Hi Mummy! I created a special birthday card just for you! 💖 Please open the attached file to see your beautiful birthday surprise!';
+          window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }, 1000);
+      }
+      triggerConfetti();
+    }
+
+    function startAsciiAnimation() {
+      const container = document.getElementById('ascii-container');
+      const letterElement = document.getElementById('letter-section');
+      const asciiLines = [
+        "██╗  ██╗ █████╗ ██████╗ ██████╗ ██╗   ██╗",
+        "██║  ██║██╔══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝",
+        "███████║███████║██████╔╝██████△╝ ╚████╔╝ ",
+        "██╔══██║██╔══██║██╔═══╝ ██╔═══╝   ╚██╔╝  ",
+        "██║  ██║██║  ██║██║     ██║        ██║   ",
+        "╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝        ╚═╝   ",
+        "",
+        "██████╗ ██╗██████╗ ████████╗██╗  ██╗██████╗  █████╗ ██╗   ██╗",
+        "██╔══██╗██║██╔══██╗╚══██╔══╝██║  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝",
+        "██████╔████║██████╔╝   ██║   ███████║██║  ██║███████║ ╚████╔╝ ",
+        "██╔══██╗██║██╔══██╗   ██║   ██╔══██║██║  ██║██╔══██║  ╚██╔╝  ",
+        "██████╔╝██║██║  ██║   ██║   ██║  ██║██████╔╝██║  ██║   ██║   ",
+        "╚═════╝ ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝   ╚═╝   ",
+        "",
+        "███╗   ███╗██╗   ██╗███╗   ███╗███╗   ███╗██╗   ██╗",
+        "████╗ ████║██║   ██║████╗ ████║████╗ ████║╚██╗ ██╔╝",
+        "██╔████╔██║██║   ██║██╔████╔██║██╔████╔██║ ╚████╔╝ ",
+        "██║╚██╔╝██║██║   ██║██║╚██╔╝██║██║╚██╔╝██║  ╚██╔╝  ",
+        "██║ ╚═╝ ██║╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║   ██║   ",
+        "╚═╝     ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝   ╚═╝   "
+      ];
+
+      let currentLine = 0;
+      let currentChar = 0;
+      container.innerHTML = '';
+
+      function typeNextChar() {
+        if (currentLine < asciiLines.length) {
+          const line = asciiLines[currentLine];
+          if (currentChar < line.length) {
+            const lines = container.innerHTML.split('\n');
+            lines[currentLine] = (lines[currentLine] || '') + line[currentChar];
+            container.innerHTML = lines.join('\n');
+            currentChar++;
+            setTimeout(typeNextChar, 10);
+          } else {
+            currentChar = 0;
+            currentLine++;
+            container.innerHTML += '\n';
+            setTimeout(typeNextChar, 50);
+          }
+        } else {
+          setTimeout(() => {
+            if (letterElement) letterElement.style.opacity = '1';
+          }, 1500);
+          setTimeout(triggerConfetti, 500);
+        }
+      }
+
+      typeNextChar();
+    }
+
+    function triggerConfetti() {
+      if (typeof confetti !== 'undefined') {
+        confetti({
+          particleCount: 150,
+          spread: 140,
+          origin: { y: 0.6 },
+          colors: ['#00ff88', '#ff4081', '#3f51b5', '#ff8c00', '#adff2f']
+        });
+      } else {
+        console.log('Confetti library not loaded');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const typingText = document.getElementById('typing-text');
+      if (typingText) {
+        typingText.style.width = '0';
+        setTimeout(() => {
+          typingText.style.width = '100%';
+        }, 100);
+      }
+      startAsciiAnimation();
+    });
+  </script>
+</body>
+</html>

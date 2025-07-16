@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, Mom!</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e1e1e, #2c2c2c, #4a1a4a, #1e1e1e);
+      color: #00ff88;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 2rem;
+      text-align: center;
+      overflow-x: hidden;
+      margin: 0;
+      min-height: 100vh;
+      position: relative;
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(255, 192, 203, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(173, 216, 230, 0.1) 0%, transparent 50%),
+        radial-gradient(#ffc40033 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px;
+      background-position: center, center, center, center;
+      animation: birthdayFlicker 6s infinite alternate;
+    }
+
+    @keyframes birthdayFlicker {
+      0% { 
+        background: linear-gradient(135deg, #1e1e1e, #2c2c2c, #4a1a4a, #1e1e1e);
+        filter: hue-rotate(0deg);
+      }
+      50% {
+        filter: hue-rotate(180deg);
+      }
+      100% { 
+        background: linear-gradient(135deg, #2e1e2e, #3c2c3c, #5a2a5a, #2e1e2e);
+        filter: hue-rotate(360deg);
+      }
+    }
+
+    /* Add birthday sparkles */
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #fff200;
+      border-radius: 50%;
+      animation: sparkle 3s infinite linear;
+      opacity: 0;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1) rotate(180deg); }
+    }
+
+    .sparkle:nth-child(odd) { animation-delay: 1s; }
+    .sparkle:nth-child(even) { animation-delay: 2s; }
+
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      width: 30px;
+      height: 40px;
+      background: #ff69b4;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation: float 10s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-120vh); }
+    }
+
+    .balloon:nth-child(2) { left: 10%; background: #ff8c00; animation-delay: 1s; }
+    .balloon:nth-child(3) { left: 30%; background: #00bfff; animation-delay: 2s; }
+    .balloon:nth-child(4) { left: 50%; background: #adff2f; animation-delay: 3s; }
+    .balloon:nth-child(5) { left: 70%; background: #dda0dd; animation-delay: 4s; }
+    .balloon:nth-child(6) { left: 90%; background: #ff6347; animation-delay: 5s; }
+
+    .terminal {
+      white-space: pre-wrap;
+      border: 2px solid #00ff88;
+      padding: 2rem;
+      max-width: 800px;
+      width: 90%;
+      margin: 2rem auto;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3), inset 0 0 20px rgba(255, 192, 203, 0.1);
+      border-radius: 10px;
+      position: relative;
+      transition: transform 0.3s ease;
+      z-index: 10;
+    }
+
+    .terminal:hover {
+      transform: scale(1.02);
+    }
+
+    .typing {
+      animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid #00ff88;
+      display: inline-block;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: #00ff88; }
+    }
+
+    .countdown {
+      font-size: 1.1rem;
+      margin: 1rem 0;
+      color: #ff66cc;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    button {
+      background-color: #000;
+      border: 2px solid #00ff88;
+      color: #00ff88;
+      padding: 0.75rem 1.5rem;
+      margin: 0.5rem;
+      cursor: pointer;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover, button:focus {
+      background-color: #00ff88;
+      color: #000;
+      outline: none;
+      transform: translateY(-2px);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+    }
+
+    .sub-buttons {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      color: #00ff88;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      padding: 1rem;
+      box-sizing: border-box;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #000;
+      padding: 2rem;
+      border: 2px solid #00ff88;
+      max-width: 600px;
+      width: 90%;
+      border-radius: 10px;
+      position: relative;
+      animation: modalSlideIn 0.5s ease;
+    }
+
+    @keyframes modalSlideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .close-btn {
+      background-color: #00ff88;
+      color: #000;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    .slideshow {
+      position: relative;
+      max-width: 100%;
+      margin: 1rem auto;
+    }
+
+    .slideshow img {
+      display: none;
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    .slideshow img.active {
+      display: block;
+    }
+
+    .slideshow-controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+
+    .slideshow-controls button {
+      background: rgba(0,0,0,0.7);
+      border: none;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .guestbook {
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    .guestbook textarea {
+      width: 100%;
+      background: #1e1e1e;
+      color: #00ff88;
+      border: 1px solid #00ff88;
+      padding: 1rem;
+      font-family: 'Courier New', Courier, monospace;
+      resize: vertical;
+      border-radius: 5px;
+    }
+
+    .gujarati-wish {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #000;
+      border: 2px dashed #00ff88;
+      padding: 0.5rem 1rem;
+      font-size: 1.2rem;
+      color: #fff200;
+      font-weight: bold;
+      animation: fadeInOut 6s infinite;
+      z-index: 100;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    #output {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      margin-top: 1rem;
+    }
+
+    #output.visible {
+      opacity: 1;
+    }
+
+    @media (max-width: 600px) {
+      .terminal {
+        padding: 1rem;
+      }
+      button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      .modal-content {
+        padding: 1rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Birthday sparkles -->
+  <div class="sparkle" style="top: 10%; left: 15%;"></div>
+  <div class="sparkle" style="top: 20%; left: 85%;"></div>
+  <div class="sparkle" style="top: 40%; left: 10%;"></div>
+  <div class="sparkle" style="top: 60%; left: 90%;"></div>
+  <div class="sparkle" style="top: 80%; left: 20%;"></div>
+  <div class="sparkle" style="top: 30%; left: 70%;"></div>
+
+  <!-- ...existing balloons... -->
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+  <div class="balloon"></div>
+
+  <div class="terminal" id="terminal" role="main" aria-label="Birthday Terminal Interface">
+    <h1 class="typing" id="typing-text">Happy Birthday, Mummy!</h1>
+    
+    <div style="margin: 1rem 0; color: #ff66cc; font-style: italic;">
+      🎂 It's your special day today!
+      💕 Celebrating the most amazing mom in the world...
+    </div>
+
+    <p>🎉 Welcome to your birthday celebration! Explore your memories:</p>
+    <div class="sub-buttons" role="navigation">
+      <button onclick="showSection('family')" aria-label="View Family Section">👨‍👩‍👧‍👦 Family</button>
+      <button onclick="showSection('surprise')" aria-label="View Birthday Surprise">💌 Special Message</button>
+      <button onclick="showGuestbook()" aria-label="Wish Happy Birthday to Mom">🎂 Wish Happy Birthday</button>
+    </div>
+    <div id="output" role="region" aria-live="polite"></div>
+    <canvas id="confetti-canvas" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+  </div>
+
+  <!-- ...existing modals... -->
+  <div class="modal" id="letterModal" role="dialog" aria-label="Letter from Khushbu">
+    <div class="modal-content">
+      <p>To the woman who compiled my courage and debugged my fears...<br><br>
+      Mummy, you are my greatest source of strength, the constant function in all my recursive problems. Thank you for every byte of love and every line of care.<br><br>
+      Happy Birthday!<br>
+      - Khushbu 💖</p>
+      <button class="close-btn" onclick="closeLetter()" aria-label="Close Letter">Close</button>
+    </div>
+  </div>
+
+  <div class="modal" id="guestbookModal" role="dialog" aria-label="Guestbook">
+    <div class="modal-content">
+      <h2>🎂 Wish Happy Birthday to Mummy</h2>
+      <p>Write your special birthday message and create a beautiful card to send!</p>
+      <div class="guestbook">
+        <textarea id="guestbookInput" rows="4" placeholder="Write your heartfelt birthday wishes for Mummy here..." aria-label="Birthday message input"></textarea>
+        <input type="text" id="senderName" placeholder="Your name" style="width: 100%; background: #1e1e1e; color: #00ff88; border: 1px solid #00ff88; padding: 0.5rem; margin: 0.5rem 0; font-family: 'Courier New', Courier, monospace; border-radius: 5px;">
+        <button onclick="generateCard()" aria-label="Create Birthday Card">🎨 Create Birthday Card</button>
+        
+        <div id="cardPreview" style="display: none; margin-top: 2rem; padding: 1rem; border: 2px dashed #ff66cc; border-radius: 10px; background: rgba(255, 102, 204, 0.1);">
+          <h4 style="color: #ff66cc;">Your Beautiful Birthday Card:</h4>
+          <div id="generatedCard"></div>
+          <div style="margin-top: 1rem;">
+            <button onclick="sendToMom()" style="background: #00ff88; color: #000; font-size: 1.1rem; padding: 1rem 2rem;">💌 Send Card to Mummy</button>
+          </div>
+          <p style="color: #ff66cc; margin-top: 1rem; font-size: 0.9rem;">Click "Send Card to Mummy" to download and share this beautiful birthday card! 💖</p>
+        </div>
+        
+        <div id="guestbookMessages" style="margin-top: 2rem;">
+          <h4 style="color: #ff66cc;">Birthday Wishes Collection:</h4>
+          <div id="messagesList"></div>
+        </div>
+      </div>
+      <button class="close-btn" onclick="closeGuestbook()" aria-label="Close">Close</button>
+    </div>
+  </div>
+
+  <div class="gujarati-wish">મમ્મી, તમને જન્મદિવસની દિલથી ખૂબ ખૂબ શુભકામનાઓ 💐</div>
+
+  <audio id="backgroundMusic" src="birthday.mp3" loop>
+    Your browser does not support the audio element. Please download the file <a href="birthday.mp3">here</a>.
+  </audio>
+  <button id="playMusicButton" onclick="playMusic()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #00ff88; color: #000; border: none; border-radius: 5px; cursor: pointer;">
+    🎵 Play Birthday Music
+  </button>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const output = document.getElementById("output");
+    let slideshowIndex = 0;
+    const placesImages = ["image1.jpg", "image2.jpg", "nepal_photo.jpg"];
+    let guestbookMessages = [];
+    let currentCardContent = "";
+
+    function showSection(type) {
+      let content = "";
+      output.classList.remove("visible");
+      
+      setTimeout(() => {
+        if (type === "family") {
+          content = `<div class="sub-buttons">
+            <button onclick="showFamily('husband')" aria-label="View Husband Moments">👨 Husband</button>
+            <button onclick="showFamily('son')" aria-label="View Son Moments">👦 Son</button>
+            <button onclick="showFamily('daughters')" aria-label="View Daughters Moments">👧 Daughters</button>
+            <button onclick="showFamily('Parents')" aria-label="Parents">👩‍❤️‍👨 Parents</button>
+            <button onclick="showFamily('Rinku')" aria-label="View Rinku">👩‍❤️‍👨 Rinku</button>
+            <button onclick="showFamily('brother-sister')" aria-label="View Sister Moments">👩 Brother-Sister</button>
+          </div>
+          <div id="family-content"></div>`;
+        } else if (type === "surprise") {
+          content = `<div style="text-align: center;">
+            <h3>🎂 Special Birthday Surprise</h3>
+            <p style="color: #ff66cc;">Creating something beautiful just for you...</p>
+            <div id="ascii-container" style="font-size: 0.6rem; line-height: 1.1; color: #00ff88; font-weight: bold; font-family: monospace; white-space: pre; margin: 1rem 0;">
+            </div>
+            <div id="birthday-wish" style="color: #ff66cc; font-size: 1.2rem; margin-top: 1rem; opacity: 0; transition: opacity 1s ease;">
+              💖 You fill our hearts with endless love and joy! 💖
+            </div>
+            <div id="letter-section" style="margin-top: 2rem; padding: 2rem; border: 2px solid #00ff88; border-radius: 10px; background: rgba(0, 0, 0, 0.7); opacity: 0; transition: opacity 1s ease;">
+              <h4 style="color: #ff66cc;">💌 A Special Message From Khushbu</h4>
+              <p style="text-align: left; line-height: 1.6;">
+                To the woman who compiled my courage and debugged my fears...<br><br>
+                Mummy, you are my greatest source of strength, the constant function in all my recursive problems. Thank you for every byte of love and every line of care.<br><br>
+                <span style="color: #00ff88; font-weight: bold;">Happy Birthday!</span><br>
+                <span style="color: #ff66cc;">- Khushbu 💖</span>
+              </p>
+            </div>
+          </div>`;
+          
+          setTimeout(() => {
+            startAsciiAnimation();
+          }, 500);
+          
+          try {
+            document.getElementById("birthdaySong").play();
+          } catch (e) {
+            console.log("Audio playback failed");
+          }
+        }
+        
+        output.innerHTML = content;
+        output.classList.add("visible");
+        triggerConfetti();
+      }, 300);
+    }
+
+    function showFamily(member) {
+      const container = document.getElementById("family-content");
+      let html = "";
+      
+      if (member === "husband") {
+        html = `<p>❤️ Mummy & Papa</p>
+        <img src="papa2.jpg" alt="Mom and Papa" />
+        <img src="papa1.jpeg" alt="Mom and Papa" />`;
+      } else if (member === "son") {
+        html = `<p>💙 Mummy & Son</p>
+        <img src="kartik.jpeg" alt="Mom and Son 2" />`;
+      } else if (member === "daughters") {
+        html = `<p>💖 Mummy & Daughters</p><img src="daughters.jpg" alt="Mom and Daughters" />`;
+      } else if (member === "Rinku") {
+        html = `<p>👩‍❤️‍👨 Mummy & Rinku</p><img src="rinku.jpeg" alt="Mom and Rinku" />`;
+      } else if (member === "Parents") {
+        html = `<p>👫 Mummy & Parents</p><img src="parents.jpeg" alt="Mom and Parents" />`;
+      } else if (member === "brother-sister") {
+        html = `<p>👭 Mummy & Masi</p>
+        <img src="sister.jpg" alt="Mummy and Masi" />
+        <p>👫 Mummy & Mama</p>
+        <img src="brother.jpg" alt="Mummy and Mama" />`;
+      }
+      
+      container.innerHTML = html;
+      triggerConfetti();
+    }
+
+    function showLetter() {
+      document.getElementById("letterModal").style.display = "flex";
+      triggerConfetti();
+    }
+
+    function closeLetter() {
+      document.getElementById("letterModal").style.display = "none";
+    }
+
+    function showGuestbook() {
+      document.getElementById("guestbookModal").style.display = "flex";
+      displayGuestbookMessages();
+    }
+
+    function closeGuestbook() {
+      document.getElementById("guestbookModal").style.display = "none";
+    }
+
+    function displayGuestbookMessages() {
+      const container = document.getElementById("messagesList");
+      container.innerHTML = guestbookMessages.map(msg => `<p style="border-bottom: 1px solid #00ff88; padding: 0.5rem 0; font-size: 0.9rem;">${msg}</p>`).join('');
+    }
+
+    function generateCard() {
+      const message = document.getElementById("guestbookInput").value.trim();
+      const senderName = document.getElementById("senderName").value.trim() || "Someone Special";
+      
+      if (!message) {
+        alert("Please write a birthday message first! 💝");
+        return;
+      }
+
+      const cardContent = `
+        <div style="
+          font-family: 'Georgia', serif; 
+          background: linear-gradient(135deg, #ff6b9d, #c44569, #f8b500, #feca57); 
+          color: #2c2c54; 
+          padding: 3rem; 
+          text-align: center; 
+          border-radius: 20px; 
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+          max-width: 500px;
+          margin: 0 auto;
+        ">
+          <h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: #fff;">
+            🎂 Happy Birthday Mummy! 🎂
+          </h1>
+          
+          <div style="background: rgba(255,255,255,0.9); padding: 2rem; border-radius: 15px; margin: 2rem 0;">
+            <p style="font-size: 1.2rem; line-height: 1.6; color: #2c2c54; font-style: italic; margin: 0;">
+              "${message}"
+            </p>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <p style="font-size: 1.1rem; color: #fff; margin: 0.5rem 0;">🌟 Wishing you joy, love, and happiness! 🌟</p>
+            <p style="font-size: 1rem; font-weight: bold; color: #fff;">
+              With love,<br>💖 ${senderName} 💖
+            </p>
+          </div>
+          
+          <div style="margin-top: 2rem; font-size: 2rem;">
+            🎉 🎈 🎁 🌸 🎊
+          </div>
+        </div>`;
+
+      document.getElementById("generatedCard").innerHTML = cardContent;
+      document.getElementById("cardPreview").style.display = "block";
+      currentCardContent = cardContent;
+
+      guestbookMessages.push(`💝 ${senderName}: "${message}"`);
+      displayGuestbookMessages();
+      
+      document.getElementById("guestbookInput").value = "";
+      document.getElementById("senderName").value = "";
+      
+      triggerConfetti();
+      
+      document.getElementById("cardPreview").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function sendToMom() {
+      if (!currentCardContent) {
+        alert("Please create a birthday card first! 🎨");
+        return;
+      }
+
+      const shareableCard = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>🎂 Special Birthday Card for Mummy 💖</title>
+          <meta charset="UTF-8">
+          <style>
+            body {
+              margin: 0;
+              padding: 2rem;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              min-height: 100vh;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-family: Arial, sans-serif;
+            }
+          </style>
+        </head>
+        <body>
+          ${currentCardContent}
+        </body>
+        </html>`;
+
+      try {
+        const blob = new Blob([shareableCard], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Beautiful_Birthday_Card_For_Mummy.html";
+        a.click();
+        URL.revokeObjectURL(url);
+
+        alert(`🎉 Your beautiful birthday card is ready to send!\n\n💌 The card will download automatically\n📧 Attach it to an email or message\n💖 Send it to Mummy with lots of love!\n\nShe's going to absolutely love this surprise! ✨`);
+
+        if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+          setTimeout(() => {
+            const subject = "🎂 Special Birthday Card for You! 🎂";
+            const body = "Hi Mummy! I created a special birthday card just for you! 💖 Please open the attached file to see your beautiful birthday surprise!";
+            window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          }, 1000);
+        }
+      } catch (e) {
+        console.error("Failed to create or download the card:", e);
+        alert("An error occurred while creating the card. Please try again.");
+      }
+    }
+
+    function startAsciiAnimation() {
+      const container = document.getElementById("ascii-container");
+      const wishElement = document.getElementById("birthday-wish");
+      const letterElement = document.getElementById("letter-section");
+
+      if (!container || !wishElement || !letterElement) {
+        console.log("ASCII animation elements not found");
+        return;
+      }
+
+      const asciiLines = [
+        "██╗  ██╗ █████╗ ██████╗ ██████╗ ██╗   ██╗",
+        "██║  ██║██╔══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝",
+        "███████║███████║██████╔╝██████╔╝ ╚████╔╝ ",
+        "██╔══██║██╔══██║██╔═══╝ ██╔═══╝   ╚██╔╝  ",
+        "██║  ██║██║  ██║██║     ██║        ██║   ",
+        "╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝        ╚═╝   ",
+        "",
+        "██████╗ ██╗██████╗ ████████╗██╗  ██╗██████╗  █████╗ ██╗   ██╗",
+        "██╔══██╗██║██╔══██╗╚══██╔══╝██║  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝",
+        "██████╔╝██║██████╔╝   ██║   ███████║██║  ██║███████║ ╚████╔╝ ",
+        "██╔══██╗██║██╔══██╗   ██║   ██╔══██║██║  ██║██╔══██║  ╚██╔╝  ",
+        "██████╔╝██║██║  ██║   ██║   ██║  ██║██████╔╝██║  ██║   ██║   ",
+        "╚═════╝ ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝   ╚═╝   ",
+        "",
+        "███╗   ███╗██╗   ██╗███╗   ███╗███╗   ███╗██╗   ██╗",
+        "████╗ ████║██║   ██║████╗ ████║████╗ ████║╚██╗ ██╔╝",
+        "██╔████╔██║██║   ██║██╔████╔██║██╔████╔██║ ╚████╔╝ ",
+        "██║╚██╔╝██║██║   ██║██║╚██╔╝██║██║╚██╔╝██║  ╚██╔╝  ",
+        "██║ ╚═╝ ██║╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║   ██║   ",
+        "╚═╝     ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝   ╚═╝   "
+      ];
+
+      let currentLine = 0;
+      let currentChar = 0;
+      container.innerHTML = "";
+
+      function typeNextChar() {
+        if (currentLine < asciiLines.length) {
+          const line = asciiLines[currentLine];
+
+          if (currentChar < line.length) {
+            const lines = container.innerHTML.split('\n');
+            if (lines.length <= currentLine) {
+              lines.push('');
+            }
+            lines[currentLine] = line.substring(0, currentChar + 1);
+            container.innerHTML = lines.join('\n');
+
+            currentChar++;
+            setTimeout(typeNextChar, 20);
+          } else {
+            currentLine++;
+            currentChar = 0;
+            container.innerHTML += '\n';
+            setTimeout(typeNextChar, 100);
+          }
+        } else {
+          wishElement.style.opacity = "1";
+          container.style.textShadow = "0 0 10px #00ff88, 0 0 20px #00ff88";
+
+          setTimeout(() => {
+            letterElement.style.opacity = "1";
+          }, 1500);
+
+          setTimeout(() => {
+            triggerConfetti();
+          }, 500);
+        }
+      }
+
+      typeNextChar();
+    }
+
+    function triggerConfetti() {
+      try {
+        if (typeof confetti !== 'undefined') {
+          confetti({
+            particleCount: 150,
+            spread: 140,
+            origin: { y: 0.6 },
+            colors: ['#00ff88', '#ff4081', '#3f51b5', '#ff8c00', '#adff2f']
+          });
+        } else {
+          console.warn("Confetti library is not loaded.");
+        }
+      } catch (e) {
+        console.error("Confetti failed to load:", e);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const typingText = document.getElementById("typing-text");
+      if (typingText) {
+        typingText.style.width = "0";
+        setTimeout(() => {
+          typingText.style.width = "100%";
+        }, 100);
+      }
+
+      const backgroundMusic = document.getElementById("backgroundMusic");
+      const playMusicButton = document.getElementById("playMusicButton");
+
+      if (backgroundMusic) {
+        backgroundMusic.volume = 0.5; // Set volume to 50%
+        backgroundMusic.play().then(() => {
+          console.log("Background music is playing.");
+          playMusicButton.style.display = "none"; // Hide the button if autoplay works
+        }).catch((error) => {
+          console.warn("Autoplay failed. User interaction required to play music:", error);
+          playMusicButton.style.display = "inline-block"; // Show the button if autoplay fails
+        });
+      } else {
+        console.error("Audio element not found.");
+      }
+    });
+
+    function playMusic() {
+      const backgroundMusic = document.getElementById("backgroundMusic");
+      if (backgroundMusic) {
+        backgroundMusic.play().then(() => {
+          console.log("Background music is playing.");
+          document.getElementById("playMusicButton").style.display = "none"; // Hide the button after playing
+        }).catch((error) => {
+          console.error("Failed to play music:", error);
+        });
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, Mom!</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e1e1e, #2c2c2c, #4a1a4a, #1e1e1e);
+      color: #00ff88;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 2rem;
+      text-align: center;
+      overflow-x: hidden;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(255, 192, 203, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(173, 216, 230, 0.1) 0%, transparent 50%);
+      background-size: 100% 100%, 100% 100%, 100% 100%;
+      animation: birthdayFlicker 6s infinite alternate;
+    }
+
+    @keyframes birthdayFlicker {
+      0% { 
+        background: linear-gradient(135deg, #1e1e1e, #2c2c2c, #4a1a4a, #1e1e1e);
+        filter: hue-rotate(0deg);
+      }
+      50% {
+        filter: hue-rotate(180deg);
+      }
+      100% { 
+        background: linear-gradient(135deg, #2e1e2e, #3c2c3c, #5a2a5a, #2e1e2e);
+        filter: hue-rotate(360deg);
+      }
+    }
+    
+    .terminal {
+      white-space: pre-wrap;
+      border: 2px solid #00ff88;
+      padding: 2rem;
+      max-width: 800px;
+      width: 90%;
+      margin: 2rem auto;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3), inset 0 0 20px rgba(255, 192, 203, 0.1);
+      border-radius: 10px;
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+    .terminal:hover {
+      transform: scale(1.02);
+    }
+    .typing {
+      animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid #00ff88;
+      display: inline-block;
+    }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: #00ff88; }
+    }
+    button {
+      background-color: #000;
+      border: 2px solid #00ff88;
+      color: #00ff88;
+      padding: 0.75rem 1.5rem;
+      margin: 0.5rem;
+      cursor: pointer;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    button:hover, button:focus {
+      background-color: #00ff88;
+      color: #000;
+      outline: none;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 1rem 0;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+    }
+    .sub-buttons {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      color: #00ff88;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      padding: 1rem;
+      box-sizing: border-box;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #000;
+      padding: 2rem;
+      border: 2px solid #00ff88;
+      max-width: 600px;
+      width: 90%;
+      border-radius: 10px;
+      position: relative;
+    }
+    .close-btn {
+      background-color: #00ff88;
+      color: #000;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    .slideshow {
+      position: relative;
+      max-width: 100%;
+      margin: 1rem auto;
+    }
+    .slideshow img {
+      display: none;
+      width: 100%;
+      border-radius: 5px;
+    }
+    .slideshow img.active {
+      display: block;
+    }
+    .slideshow-controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+    .slideshow-controls button {
+      background: rgba(0,0,0,0.7);
+      border: none;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+    }
+    .guestbook {
+      margin-top: 2rem;
+      text-align: left;
+    }
+    .guestbook textarea {
+      width: 100%;
+      background: #1e1e1e;
+      color: #00ff88;
+      border: 1px solid #00ff88;
+      padding: 1rem;
+      font-family: 'Courier New', Courier, monospace;
+      resize: vertical;
+      border-radius: 5px;
+    }
+    #output {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #output.visible {
+      opacity: 1;
+    }
+    @media (max-width: 600px) {
+      .terminal {
+        padding: 1rem;
+      }
+      button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      .modal-content {
+        padding: 1rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal" id="terminal" role="main" aria-label="Birthday Terminal Interface">
+    <h1 class="typing" id="typing-text">Happy Birthday, Mummy!</h1>
+    <div style="margin: 1rem 0; color: #ff66cc; font-style: italic;">
+      🎂 It's your special day today!
+      💕 Celebrating the most amazing mom in the world...
+    </div>
+    <p>🎉 Welcome to your birthday celebration! Explore your memories:</p>
+    <div class="sub-buttons" role="navigation">
+      <button onclick="showSection('family')" aria-label="View Family Section">Family</button>
+      <button onclick="showSection('surprise')" aria-label="View Birthday Code">Birthday Surprise</button>
+      <button onclick="downloadCard()" aria-label="Download Birthday Card">🎉 Download Card</button>
+      <button onclick="showGuestbook()" aria-label="View Guestbook">✍️ Guestbook</button>
+      <button onclick="showLetter()" aria-label="Read Letter from Khushbu">💌 From Khushbu</button>
+    </div>
+    <div id="output" role="region" aria-live="polite"></div>
+    <canvas id="confetti-canvas" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
+  </div>
+
+  <div class="modal" id="letterModal" role="dialog" aria-label="Letter from Khushbu">
+    <div class="modal-content">
+      <p>To the woman who compiled my courage and debugged my fears...<br><br>
+      Mummy, you are my greatest source of strength, the constant function in all my recursive problems. Thank you for every byte of love and every line of care.<br><br>
+      Happy Birthday!<br>
+      - Khushbu 💖</p>
+      <button class="close-btn" onclick="closeLetter()" aria-label="Close Letter">Close</button>
+    </div>
+  </div>
+
+  <div class="modal" id="guestbookModal" role="dialog" aria-label="Guestbook">
+    <div class="modal-content">
+      <h2>Guestbook</h2>
+      <p>Leave a birthday message for Mom!</p>
+      <div class="guestbook">
+        <textarea id="guestbookInput" rows="4" placeholder="Type your message here..." aria-label="Guestbook message input"></textarea>
+        <button onclick="addGuestbookMessage()" aria-label="Submit Guestbook Message">Submit</button>
+        <div id="guestbookMessages"></div>
+      </div>
+      <button class="close-btn" onclick="closeGuestbook()" aria-label="Close Guestbook">Close</button>
+    </div>
+  </div>
+
+  <audio id="birthdaySong" src="birthday_song.mp3"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const output = document.getElementById("output");
+    let slideshowIndex = 0;
+    const placesImages = ["nepal_photo.jpg", "paris_photo.jpg", "beach_photo.jpg"]; // Add more images as needed
+    let guestbookMessages = [];
+
+    function showSection(type) {
+      let content = "";
+      output.classList.remove("visible");
+      setTimeout(() => {
+        if (type === "family") {
+          content = `<div class="sub-buttons">
+            <button onclick="showFamily('husband')" aria-label="View Husband Moments">👨 Husband</button>
+            <button onclick="showFamily('son')" aria-label="View Son Moments">👦 Son</button>
+            <button onclick="showFamily('daughters')" aria-label="View Daughters Moments">👧 Daughters</button>
+            <button onclick="showFamily('sonwife')" aria-label="View Son's Wife Moments">👩‍❤️‍👨 Son-Wife</button>
+            <button onclick="showFamily('sister')" aria-label="View Sister Moments">👩 Sister</button>
+            <button onclick="showFamily('brother')" aria-label="View Brother Moments">👨 Brother</button>
+          </div>
+          <div id="family-content"></div>`;
+        } else if (type === "surprise") {
+          content = `<div style="text-align: center;">
+            <h3>🎂 ASCII Birthday Art</h3>
+            <p style="color: #ff66cc;">Creating your special birthday message...</p>
+            <pre style="font-size: 0.7rem; line-height: 1.2; color: #00ff88; font-weight: bold;">
+██╗  ██╗ █████╗ ██████╗ ██████╗ ██╗   ██╗
+██║  ██║██╔══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝
+███████║███████║██████╔╝██████╔╝ ╚████╔╝ 
+██╔══██║██╔══██║██╔═══╝ ██╔═══╝   ╚██╔╝  
+██║  ██║██║  ██║██║     ██║        ██║   
+╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝        ╚═╝   
+
+██████╗ ██╗██████╗ ████████╗██╗  ██╗██████╗  █████╗ ██╗   ██╗
+██╔══██╗██║██╔══██╗╚══██╔══╝██║  ██║██╔══██╗██╔══██╗╚██╗ ██╔╝
+██████╔╝██║██████╔╝   ██║   ███████║██║  ██║███████║ ╚████╔╝ 
+██╔══██╗██║██╔══██╗   ██║   ██╔══██║██║  ██║██╔══██║  ╚██╔╝  
+██████╔╝██║██║  ██║   ██║   ██║  ██║██████╔╝██║  ██║   ██║   
+╚═════╝ ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝   ╚═╝   
+
+███╗   ███╗██╗   ██╗███╗   ███╗███╗   ███╗██╗   ██╗
+████╗ ████║██║   ██║████╗ ████║████╗ ████║╚██╗ ██╔╝
+██╔████╔██║██║   ██║██╔████╔██║██╔████╔██║ ╚████╔╝ 
+██║╚██╔╝██║██║   ██║██║╚██╔╝██║██║╚██╔╝██║  ╚██╔╝  
+██║ ╚═╝ ██║╚██████╔╝██║ ╚═╝ ██║██║ ╚═╝ ██║   ██║   
+╚═╝     ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝     ╚═╝   ╚═╝   
+            </pre>
+            <p style="color: #ff66cc; font-size: 1.2rem; margin-top: 1rem;">
+              💖 You are the most amazing mom in the world! 💖
+            </p>
+          </div>`;
+          document.getElementById("birthdaySong").play();
+        }
+        output.innerHTML = content;
+        output.classList.add("visible");
+        confetti();
+      }, 300);
+    }
+
+    function showFamily(member) {
+      const container = document.getElementById("family-content");
+      let html = "";
+      if (member === "husband") {
+        html = `<p>❤️ Mummy & Papa Moments</p><img src="./papa_mummy.jpg" alt="Mom and Husband" />`;
+      } else if (member === "son") {
+        html = `<p>💙 Mummy & Son Moments</p>
+        <img src="son_mom_1.jpg" alt="Mom and Son 1" />
+        <img src="son_mom_2.jpg" alt="Mom and Son 2" />`;
+      } else if (member === "daughters") {
+        html = `<p>💖 Mummy & Daughters</p><img src="daughters_mom.jpg" alt="Mom and Daughters" />`;
+      } else if (member === "sonwife") {
+        html = `<p>👩‍❤️‍👨 Mummy & Son's Wife</p><img src="sonwife_mom.jpg" alt="Mom and Son's Wife" />`;
+      } else if (member === "sister") {
+        html = `<p>👭 Mummy & Sister</p><img src="sister_mom.jpg" alt="Mom and Sister" />`;
+      } else if (member === "brother") {
+        html = `<p>👫 Mummy & Brother</p><img src="brother_mom.jpg" alt="Mom and Brother" />`;
+      }
+      container.innerHTML = html;
+      confetti();
+    }
+
+    function changeSlide(direction) {
+      const images = document.querySelectorAll(".slideshow img");
+      images[slideshowIndex].classList.remove("active");
+      slideshowIndex = (slideshowIndex + direction + images.length) % images.length;
+      images[slideshowIndex].classList.add("active");
+    }
+
+    function showLetter() {
+      document.getElementById("letterModal").style.display = "flex";
+      confetti();
+    }
+
+    function closeLetter() {
+      document.getElementById("letterModal").style.display = "none";
+    }
+
+    function showGuestbook() {
+      document.getElementById("guestbookModal").style.display = "flex";
+      displayGuestbookMessages();
+    }
+
+    function closeGuestbook() {
+      document.getElementById("guestbookModal").style.display = "none";
+    }
+
+    function addGuestbookMessage() {
+      const input = document.getElementById("guestbookInput");
+      if (input.value.trim()) {
+        guestbookMessages.push(input.value.trim());
+        input.value = "";
+        displayGuestbookMessages();
+        confetti();
+      }
+    }
+
+    function displayGuestbookMessages() {
+      const container = document.getElementById("guestbookMessages");
+      container.innerHTML = guestbookMessages.map(msg => `<p style="border-bottom: 1px solid #00ff88; padding: 0.5rem 0;">${msg}</p>`).join('');
+    }
+
+    function downloadCard() {
+      const cardContent = `
+        <div style="font-family: 'Courier New', Courier, monospace; background: #000; color: #00ff88; padding: 2rem; text-align: center; border: 2px solid #00ff88;">
+          <h1>Happy Birthday, Mummy!</h1>
+          <p>Thank you for being the best mom ever! 💖</p>
+          <p>From Khushbu</p>
+        </div>`;
+      const blob = new Blob([cardContent], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Mom_Birthday_Card.html";
+      a.click();
+      URL.revokeObjectURL(url);
+      confetti();
+    }
+
+    function confetti() {
+      confetti.create(document.getElementById('confetti-canvas'), {
+        resize: true
+      })({
+        particleCount: 150,
+        spread: 140,
+        origin: { y: 0.6 },
+        colors: ['#00ff88', '#ff4081', '#3f51b5']
+      });
+    }
+
+    // Initialize typing animation
+    document.addEventListener("DOMContentLoaded", () => {
+      const typingText = document.getElementById("typing-text");
+      typingText.style.width = "0";
+      setTimeout(() => {
+        typingText.style.width = "100%";
+      }, 100);
+    });
+  </script>
+</body>
+</html>
