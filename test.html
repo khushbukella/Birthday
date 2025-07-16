@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday, Mom!</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #00ff88;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 2rem;
+    }
+    .terminal {
+      white-space: pre-wrap;
+      border: 2px solid #00ff88;
+      padding: 1rem;
+      max-width: 700px;
+      margin: auto;
+      background-color: #000;
+      box-shadow: 0 0 15px #00ff88;
+    }
+    .input-line {
+      color: #00ffff;
+    }
+    .command {
+      color: #fff200;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal" id="terminal">
+    root@khushbu:~# Happy Birthday, Mummy!
+
+    loading_love..................................................100%
+    loading_memories..............................................100%
+
+    Type "help" to get started.
+  </div>
+  <script>
+    const terminal = document.getElementById("terminal");
+    const responses = {
+      help: `
+Available Commands:
+  history     — Show major moments we’ve shared
+  love        — Display reasons why I love you
+  surprise    — See your birthday message in full
+  exit        — Close the interface`,
+
+      history: `
+  - First time I said 'maa'
+  - My first day of school (you held my hand)
+  - Every birthday cake you made with love
+  - My graduation photo (you had tears!)`,
+
+      love: `
+  - You always put me first
+  - Your smile fixes my bad days
+  - You make the best Gujarati food 🍛
+  - You're my everything`,
+
+      surprise: `
+class Mom:
+    def __init__(self):
+        self.name = "Mummy"
+        self.age = 48
+        self.love = float('inf')
+
+    def birthday_message(self):
+        return "Happy 48th Birthday! Thank you for being my system architect 💖"
+
+m = Mom()
+print(m.birthday_message())`,
+
+      exit: "System shutting down... Love you Maa 💗"
+    };
+
+    document.addEventListener("keydown", async (e) => {
+      if (e.key === "Enter") {
+        const command = prompt("Enter command (help/history/love/surprise/exit):");
+        if (command && responses[command.trim()]) {
+          terminal.innerText += `\n\n> ${command}\n` + responses[command.trim()];
+        } else {
+          terminal.innerText += `\n\n> ${command}\nCommand not found.`;
+        }
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+    });
+  </script>
+</body>
+</html>
